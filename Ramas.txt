@@ -1,0 +1,270 @@
+
+
+progr
+
+Git branch
+
+Las ramas en Git y GitHub son un concepto fundamental que permite trabajar de forma paralela en distintas versiones de un proyecto sin afectar la rama principal (por lo general llamada main o master). Las ramas te permiten realizar cambios de manera aislada, lo que facilita el trabajo colaborativo y la experimentación sin alterar el código principal.
+
+Voy a explicarte en detalle qué son las ramas, cómo se crean, cómo se fusionan y cómo puedes retroceder cambios, todo con un ejemplo sencillo.
+
+1. git branch [--color[=<when>] | --no-color] [--show-current] [-v [--abbrev=<n> | --no-abbrev]] [--column[=<options>] | --no-column] [--sort=<key>] [--merged [<commit>]] [--no-merged [<commit>]] [--contains [<commit>]] [--no-contains [<commit>]] [--points-at <object>] [--format=<format>] [(-r | --remotes) | (-a | --all)] [--list] [<pattern>…​]
+Este es el comando git branch con múltiples opciones para listar las ramas existentes en el repositorio:
+
+--color[=<when>]: Controla si se usa o no color en la salida. Los valores posibles para <when> son:
+
+always: Siempre usa color.
+auto: Usa color si la salida es a una terminal.
+never: Nunca usa color.
+--no-color: Desactiva el uso de colores en la salida.
+
+--show-current: Muestra la rama actual en la que te encuentras en lugar de listar todas las ramas.
+
+-v [--abbrev=<n> | --no-abbrev]: Muestra el hash corto del último commit en cada rama. Si usas --abbrev=<n>, acorta el hash a n caracteres. --no-abbrev muestra el hash completo del commit.
+
+--column[=<options>] | --no-column: Organiza las ramas en columnas para mejorar la legibilidad. --no-column desactiva esta opción. Si usas --column=<options>, puedes especificar el formato y cómo se organizan las columnas.
+
+--sort=<key>: Ordena las ramas según la clave especificada. Algunas de las claves más comunes son:
+
+-committerdate: Ordena por la fecha del último commit.
+-creatordate: Ordena por la fecha de creación de la rama.
+-authordate: Ordena por la fecha del autor del commit.
+-refname: Ordena por el nombre de la rama.
+--merged [<commit>]: Muestra las ramas que ya están fusionadas con el commit especificado (o la rama actual si no se especifica ningún commit).
+
+--no-merged [<commit>]: Muestra las ramas que no están fusionadas con el commit especificado (o la rama actual si no se especifica).
+
+--contains [<commit>]: Muestra las ramas que contienen el commit especificado.
+
+--no-contains [<commit>]: Muestra las ramas que no contienen el commit especificado.
+
+--points-at <object>: Muestra las ramas que apuntan al objeto (como un commit o una etiqueta) especificado.
+
+--format=<format>: Permite personalizar el formato de salida. Puedes usar variables como %refname (nombre de la rama), %upstream (rama upstream), %committerdate, etc.
+
+(-r | --remotes) | (-a | --all):
+
+-r o --remotes: Muestra las ramas remotas.
+-a o --all: Muestra todas las ramas (locales y remotas).
+--list: Lista las ramas que coinciden con el patrón dado.
+
+<pattern>: Puedes proporcionar un patrón para filtrar las ramas. Por ejemplo, git branch 'feature/*' muestra todas las ramas que comienzan con feature/.
+
+2. git branch [--track[=(direct|inherit)] | --no-track] [-f] <branchname> [<start-point>]
+Este comando se usa para crear nuevas ramas.
+
+--track[=(direct|inherit)]: Configura la nueva rama para hacer seguimiento de una rama remota.
+
+direct: La rama local se configura para hacer seguimiento de una rama remota explícita.
+inherit: La rama local hereda el seguimiento de la rama remota si es una rama existente.
+--no-track: No configura el seguimiento de la rama remota.
+
+-f: Forza la creación de la rama, incluso si ya existe una rama con el mismo nombre.
+
+<branchname>: Especifica el nombre de la nueva rama.
+
+<start-point>: Especifica el punto de inicio para la nueva rama (por ejemplo, un commit o una rama existente).
+
+3. git branch (--set-upstream-to=<upstream> | -u <upstream>) [<branchname>]
+Este comando establece la rama remota (upstream) con la cual una rama local debe estar asociada.
+
+--set-upstream-to=<upstream> o -u <upstream>: Configura la rama especificada para hacer seguimiento de la rama remota o de un commit.
+
+<branchname>: Especifica la rama local que se va a configurar para hacer seguimiento.
+
+4. git branch --unset-upstream [<branchname>]
+Este comando elimina la configuración de upstream (rama remota) para la rama local especificada.
+
+<branchname>: Especifica la rama local de la cual se eliminará el upstream. Si no se especifica, se elimina el upstream de la rama actual.
+5. git branch (-m | -M) [<oldbranch>] <newbranch>
+Este comando se utiliza para renombrar una rama.
+
+-m: Renombra la rama de manera segura. Si la rama de destino ya existe, el comando fallará.
+
+-M: Renombra la rama de manera forzada. Si la rama de destino ya existe, esta será sobrescrita.
+
+<oldbranch>: Nombre actual de la rama.
+
+<newbranch>: El nuevo nombre de la rama.
+
+6. git branch (-c | -C) [<oldbranch>] <newbranch>
+Este comando también se utiliza para renombrar ramas, pero con un comportamiento ligeramente diferente:
+
+-c: Renombra la rama de manera segura (similar a -m), y fallará si la rama de destino ya existe.
+
+-C: Renombra la rama forzosamente (similar a -M).
+
+<oldbranch>: Nombre de la rama a renombrar.
+
+<newbranch>: Nuevo nombre de la rama.
+
+7. git branch (-d | -D) [-r] <branchname>…​
+Este comando se utiliza para eliminar ramas.
+
+-d: Elimina una rama de manera segura. Git no eliminará la rama si tiene cambios no fusionados o si no está completamente integrada en la rama actual.
+
+-D: Elimina la rama de manera forzada, incluso si tiene cambios no fusionados.
+
+-r: Elimina una rama remota en lugar de una local.
+
+<branchname>: Nombre de la rama o ramas a eliminar.
+
+8. git branch --edit-description [<branchname>]
+Este comando permite editar la descripción de una rama. Las descripciones son metadatos asociados a la rama que pueden ayudar a identificar su propósito.
+
+<branchname>: Nombre de la rama cuya descripción deseas editar.
+En resumen, estos comandos y opciones de git branch te permiten realizar un manejo avanzado de las ramas en tu repositorio, incluyendo listar, crear, eliminar, renombrar y configurar ramas, además de gestionar sus relaciones con ramas remotas y configuraciones de seguimiento.
+
+1. ¿Qué son las ramas en Git y GitHub?
+Una rama (o branch) en Git es simplemente una versión del proyecto que contiene su propio historial de commits. Las ramas se utilizan para hacer cambios o nuevas funcionalidades sin afectar la rama principal (generalmente main).
+
+Cuando creas una nueva rama, Git hace una copia del estado del proyecto y te permite trabajar en ella de forma independiente. Después puedes decidir si deseas fusionar esa rama de nuevo a la principal (o cualquier otra rama), combinando los cambios.
+
+2. Crear una nueva rama
+Imagina que tienes un repositorio en Git y quieres trabajar en una nueva característica sin afectar la rama main. Aquí están los pasos:
+
+Crea una nueva rama:
+Primero, asegúrate de estar en la rama main o en la rama desde la cual quieres crear la nueva. Luego, usa el siguiente comando para crear una nueva rama y cambiarte a ella:
+
+bash
+Copiar código
+git checkout -b nueva-funcionalidad
+El comando git checkout -b <nombre-de-la-rama> hace dos cosas:
+
+Crea la rama llamada nueva-funcionalidad.
+Cambia a esa rama automáticamente.
+Verifica que estás en la nueva rama:
+Puedes verificar en qué rama estás con el comando:
+
+bash
+Copiar código
+git branch
+Esto mostrará algo como:
+
+css
+Copiar código
+  main
+* nueva-funcionalidad
+El asterisco (*) indica que estás en la rama nueva-funcionalidad.
+
+3. Hacer cambios y subir archivos
+Ahora que estás en la rama nueva-funcionalidad, puedes comenzar a trabajar y agregar archivos.
+
+Añadir un archivo nuevo:
+Crea un archivo en tu proyecto, por ejemplo:
+
+bash
+Copiar código
+echo "Esta es la nueva funcionalidad" > funcionalidad.txt
+Añadir el archivo al área de preparación (staging area):
+bash
+Copiar código
+git add funcionalidad.txt
+Hacer un commit:
+Después de añadir el archivo al área de preparación, realiza un commit para guardar los cambios:
+
+bash
+Copiar código
+git commit -m "Agregar funcionalidad.txt"
+Subir los cambios al repositorio remoto (GitHub):
+Ahora, sube tu rama nueva-funcionalidad a GitHub:
+
+bash
+Copiar código
+git push -u origin nueva-funcionalidad
+El flag -u configura la rama remota para que puedas usar git push en el futuro sin especificar la rama.
+
+4. Fusionar (Merge) la rama con la principal
+Una vez que hayas terminado de trabajar en la rama nueva-funcionalidad y quieras incorporar esos cambios a la rama principal (main), debes fusionar (merge) las ramas.
+
+Cambiar a la rama main:
+Primero, vuelve a la rama principal:
+
+bash
+Copiar código
+git checkout main
+Fusionar la rama nueva-funcionalidad con la rama main:
+Ahora, realiza la fusión:
+
+bash
+Copiar código
+git merge nueva-funcionalidad
+Git intentará fusionar los cambios de nueva-funcionalidad en main. Si no hay conflictos, todo se integrará automáticamente. Si hay conflictos, Git te lo indicará y tendrás que resolverlos manualmente.
+
+Subir los cambios fusionados a GitHub:
+Una vez que se haya realizado la fusión correctamente, sube los cambios a GitHub:
+
+bash
+Copiar código
+git push origin main
+5. Retroceder un cambio (Deshacer un commit)
+Si después de hacer un commit te das cuenta de que cometiste un error o deseas deshacer el último cambio, hay varias formas de hacerlo dependiendo de si has hecho push a GitHub o no.
+
+Deshacer el último commit (sin hacer push):
+Si todavía no has subido los cambios a GitHub y quieres deshacer el último commit, puedes usar:
+
+bash
+Copiar código
+git reset --soft HEAD~1
+Este comando deshace el último commit, pero mantiene los cambios en tu área de preparación (staging area), lo que te permite modificar el commit antes de hacerlo de nuevo.
+
+Si quieres eliminar completamente los cambios, puedes usar:
+
+bash
+Copiar código
+git reset --hard HEAD~1
+Este comando eliminará tanto el commit como los cambios realizados en tu directorio de trabajo.
+
+Deshacer un commit después de haber hecho push a GitHub:
+Si ya subiste los cambios a GitHub y quieres deshacer un commit, puedes hacer un "revert" de ese commit:
+
+bash
+Copiar código
+git revert <hash-del-commit>
+Este comando crea un nuevo commit que deshace el cambio realizado en el commit especificado, sin afectar el historial de Git.
+
+6. Ver el historial de commits
+Para ver el historial de commits en tu rama actual, puedes usar el comando:
+
+bash
+Copiar código
+git log
+Este comando te muestra una lista de todos los commits hechos en la rama, incluyendo el identificador del commit, el autor, la fecha y el mensaje del commit.
+
+Ejemplo completo:
+Crear la rama:
+bash
+Copiar código
+git checkout -b nueva-funcionalidad
+Agregar un archivo y hacer commit:
+bash
+Copiar código
+echo "Funcionalidad nueva" > funcionalidad.txt
+git add funcionalidad.txt
+git commit -m "Agregar funcionalidad nueva"
+Subir la rama a GitHub:
+bash
+Copiar código
+git push -u origin nueva-funcionalidad
+Fusionar la rama con main:
+bash
+Copiar código
+git checkout main
+git merge nueva-funcionalidad
+git push origin main
+Deshacer el último commit (si es necesario):
+bash
+Copiar código
+git reset --soft HEAD~1   # Si quieres mantener los cambios
+git reset --hard HEAD~1   # Si quieres eliminar los cambios
+Ver el historial de commits:
+bash
+Copiar código
+git log
+Resumen
+Ramas te permiten trabajar en diferentes versiones de un proyecto sin interferir con la rama principal.
+Fusionar ramas permite integrar cambios de una rama en otra, manteniendo el proyecto organizado.
+Retroceder cambios te permite deshacer errores o eliminar cambios no deseados.
+Ver el historial de commits te permite revisar los cambios hechos en el proyecto.
+Este flujo básico de trabajo con ramas en Git y GitHub es esencial para el desarrollo colaborativo y el mantenimiento de un proyecto.
+*********************
